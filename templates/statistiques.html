@@ -1,0 +1,204 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Statistiques</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+
+  <h1 class="text-center mb-5">📊 Tableau de bord des statistiques</h1>
+
+  <!-- 🔗 MENU DE NAVIGATION -->
+  <nav class="mb-5">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h4 class="text-center mb-3">Sommaire</h4>
+        <div class="d-flex justify-content-around flex-wrap">
+          <div>
+            <h5 class="text-primary">Environnement, ressources naturelles et énergie</h5>
+            <ul class="list-unstyled">
+              <li><a href="#animaux" class="text-decoration-none">🐶 Permis d’animaux</a></li>
+              <li><a href="#ges" class="text-decoration-none">🌍 Registre des émissions de GES</a></li>
+            </ul>
+          </div>
+          <div>
+            <h5 class="text-success">Infrastructures</h5>
+            <ul class="list-unstyled">
+              <li><a href="#construction" class="text-decoration-none">🏗️ Permis de construction</a></li>
+              <li><a href="#aqueduc" class="text-decoration-none">🚰 Bon de travail aqueduc</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 🟦 Permis d’animaux -->
+  <section id="animaux" class="mb-5">
+    <div class="card text-center shadow-sm mb-4">
+      <div class="card-body">
+        <h4 class="card-title text-primary">🐶 Permis d’animaux</h4>
+        <h2>{{ total_animaux }}</h2>
+      </div>
+    </div>
+
+    <h5 class="mt-4">Répartition des types de permis</h5>
+    <table class="table table-striped table-hover mt-3">
+      <thead class="table-dark">
+        <tr>
+          <th>Type de permis</th>
+          <th>Nombre</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in repartition_types_animaux %}
+        <tr>
+          <td>{{ item.animal_type_permis|default:"Non spécifié" }}</td>
+          <td>{{ item.nombre }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="2" class="text-center">Aucune donnée</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 🌍 Registre des émissions GES -->
+  <section id="ges" class="mt-5">
+    <div class="card text-center shadow-sm mb-4">
+      <div class="card-body">
+        <h4 class="card-title text-danger">🌍 Registre des émissions de GES</h4>
+        <h2>{{ total_ges }}</h2>
+      </div>
+    </div>
+
+    <h5 class="mt-4">Répartition par région</h5>
+    <table class="table table-striped table-hover mt-3">
+      <thead class="table-dark">
+        <tr>
+          <th>Région</th>
+          <th>Nombre d’établissements</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in repartition_region_ges %}
+        <tr>
+          <td>{{ r.region|default:"Non spécifiée" }}</td>
+          <td>{{ r.nombre }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="2" class="text-center">Aucune donnée</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h5 class="mt-4">Évolution des émissions totales (t CO₂ eq.)</h5>
+    <table class="table table-bordered mt-3">
+      <thead class="table-secondary">
+        <tr>
+          <th>Année</th>
+          <th>Émissions totales</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for g in tendances_ges %}
+        <tr>
+          <td>{{ g.annee }}</td>
+          <td>{{ g.emissions_totales|floatformat:0 }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="2" class="text-center">Aucune donnée</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 🏗️ Permis de construction -->
+  <section id="construction" class="mt-5">
+    <div class="card text-center shadow-sm mb-4">
+      <div class="card-body">
+        <h4 class="card-title text-success">🏗️ Permis de construction</h4>
+        <h2>{{ total_construction }}</h2>
+      </div>
+    </div>
+
+    <h5 class="mt-4">Tendances par année</h5>
+    <table class="table table-bordered mt-3">
+      <thead class="table-secondary">
+        <tr>
+          <th>Année</th>
+          <th>Nombre de permis</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in tendances_construction %}
+        <tr>
+          <td>{{ t.annee|date:"Y" }}</td>
+          <td>{{ t.total }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="2" class="text-center">Aucune donnée</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 🚰 Bon de travail aqueduc -->
+  <section id="aqueduc" class="mt-5">
+    <div class="card text-center shadow-sm mb-4">
+      <div class="card-body">
+        <h4 class="card-title text-info">🚰 Bon de travail aqueduc</h4>
+        <h2>{{ total_aqueduc }}</h2>
+      </div>
+    </div>
+
+    <h5 class="mt-4">Répartition par secteur</h5>
+    <table class="table table-striped table-hover mt-3">
+      <thead class="table-dark">
+        <tr>
+          <th>Secteur</th>
+          <th>Nombre</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in repartition_secteur_aqueduc %}
+        <tr>
+          <td>{{ s.secteur|default:"Non spécifié" }}</td>
+          <td>{{ s.nombre }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="2" class="text-center">Aucune donnée</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h5 class="mt-4">Tendances annuelles</h5>
+    <table class="table table-bordered mt-3">
+      <thead class="table-secondary">
+        <tr>
+          <th>Année</th>
+          <th>Nombre d’interventions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for t in tendances_aqueduc %}
+        <tr>
+          <td>{{ t.annee|date:"Y" }}</td>
+          <td>{{ t.total }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="2" class="text-center">Aucune donnée</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+</div>
+
+</body>
+</html>

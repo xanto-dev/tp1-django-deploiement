@@ -1,0 +1,13 @@
+# Ignorer les fichiers temporaires
+*.log
+*.tmp
+
+# Ignorer un dossier spécifique
+node_modules/
+env2/
+
+# Ignorer les fichiers de configuration locale
+.env
+.env2
+.idea/
+.vscode/
